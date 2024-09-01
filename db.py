@@ -17,6 +17,6 @@ class DatabaseManager:
         '''
         with self.connection:
             curs = self.connection.cursor()
-            curs.execute(statement)
+            curs.execute(statement, values or [])
             return curs
 
