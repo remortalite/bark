@@ -32,3 +32,24 @@ class DatabaseManager:
         statement = f'CREATE TABLE IF NOT EXISTS {table_name} ({values_str});'
         self._execute(statement)
 
+    def add(self, table_name:str, data:dict):
+        '''Add data to table
+
+        Arguments:
+        table_name -- name of the table
+        data -- dict with values to add, e.g. {'id': 2, 'name': 'Some title'}
+        '''
+        placeholder = ', '.join('?' * len(data))
+        column_names = ', '.join(data.keys())
+        column_values = tuple(data.values())
+
+        self._execute(
+            f'''
+            INSERT INTO {table_name} 
+            ({column_names})
+            VALUES
+            ({placeholder});
+            ''',
+            column_values,
+        )
+
