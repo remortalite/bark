@@ -1,5 +1,5 @@
 import sqlite3
-from typing import Union
+from typing import Union, Optional
 
 
 class DatabaseManager:
@@ -9,7 +9,8 @@ class DatabaseManager:
     def __del__(self):
         self.connection.close()
 
-    def _execute(self, statement: str, values: (list | tuple) = None):
+    def _execute(self, statement: str,
+                 values: Union[list, tuple, None] = None):
         '''Execute statement on connection
 
         Arguments:
@@ -69,8 +70,8 @@ class DatabaseManager:
         self._execute(statement, tuple(criteria.values()))
 
     def select(self, table_name: str,
-               criteria: Union[dict, None] = None,
-               order_by: Union[list, None] = None) -> sqlite3.Cursor:
+               criteria: Optional[dict] = None,
+               order_by: Optional[list] = None) -> sqlite3.Cursor:
         '''Select data from table with optional criteria and ordering
 
         Arguments:
@@ -83,7 +84,8 @@ class DatabaseManager:
         criteria = criteria or {}
         query = f"SELECT * FROM {table_name}"
         if criteria:
-            placeholder_criteria = [f"{column} = ?" for column in criteria.keys()]
+            placeholder_criteria = [f"{column} = ?"
+                                    for column in criteria.keys()]
             select_criteria = ' AND '.join(placeholder_criteria)
             query += f' WHERE {select_criteria}'
         if order_by:
