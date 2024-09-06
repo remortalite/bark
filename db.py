@@ -53,3 +53,16 @@ class DatabaseManager:
             ''',
             column_values,
         )
+
+    def delete(self, table_name: str, criteria: dict):
+        '''Delete data from table with specified criteria
+
+        Arguments:
+        table_name -- name of the table
+        criteria -- a dict with parameters of the record to
+                    delete, i.e. WHERE clause of SQL (e.g. {'id': 1}).
+        '''
+        placeholder = [f'{column} = ?' for column in criteria.keys()]
+        delete_criteria = ' AND '.join(placeholder)
+        statement = f'DELETE FROM {table_name} WHERE {delete_criteria}'
+        self._execute(statement, tuple(criteria.values()))
