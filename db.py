@@ -2,13 +2,13 @@ import sqlite3
 
 
 class DatabaseManager:
-    def __init__(self, db_filename:str):
+    def __init__(self, db_filename: str):
         self.connection = sqlite3.connect(db_filename)
 
     def __del__(self):
         self.connection.close()
 
-    def _execute(self, statement:str, values:list|tuple=None):
+    def _execute(self, statement: str, values: (list | tuple) = None):
         '''Execute statement on connection
 
         Arguments:
@@ -20,19 +20,20 @@ class DatabaseManager:
             curs.execute(statement, values or [])
             return curs
 
-    def create_table(self, table_name:str, columns_dict:dict):
+    def create_table(self, table_name: str, columns_dict: dict):
         '''Execute table creation with column type at columns_dict
 
         Arguments:
         table_name -- name of the table
-        columns_dict -- dict with keys as columns names and values as data type, e.g. {'id': 'INTEGER PRIMARY KEY'}
+        columns_dict -- dict with keys as columns names and values as
+                        data type, e.g. {'id': 'INTEGER PRIMARY KEY'}
         '''
         columns_str_list = [f'{k} {v}' for k, v in columns_dict.items()]
         values_str = ', '.join(columns_str_list)
         statement = f'CREATE TABLE IF NOT EXISTS {table_name} ({values_str});'
         self._execute(statement)
 
-    def add(self, table_name:str, data:dict):
+    def add(self, table_name: str, data: dict):
         '''Add data to table
 
         Arguments:
@@ -45,11 +46,10 @@ class DatabaseManager:
 
         self._execute(
             f'''
-            INSERT INTO {table_name} 
+            INSERT INTO {table_name}
             ({column_names})
             VALUES
             ({placeholder});
             ''',
             column_values,
         )
-
