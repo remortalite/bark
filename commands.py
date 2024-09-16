@@ -1,5 +1,6 @@
 from db import DatabaseManager
 import sys
+from datetime import datetime
 
 
 db = DatabaseManager('bookmarks.db')
@@ -49,10 +50,10 @@ class ListBookmarksCommand:
         Returns:
         list of rows of data
         '''
-        return db.select('bookmarks', order_by=self.order_by).fetchall()
+        return db.select('bookmarks', order_by=(self.order_by,)).fetchall()
 
 
-class DeleteBookmars:
+class DeleteBookmarkCommand:
     def execute(self, data: str):
         '''
         Delete bookmark from db
